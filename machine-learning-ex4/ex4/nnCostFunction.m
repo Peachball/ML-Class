@@ -61,9 +61,11 @@ X = [ones(size(X,1),1), X];
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-a2 = sigmoid(X*Theta1'); %each row is from a different input set (example)
+z2 = X * Theta1';
+a2 = sigmoid(z2); %each row is from a different input set (example)
 a2 = [ones(size(a2,1),1), a2];
-a3 = sigmoid(a2 * Theta2');
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 cursum = 0;
 for i = 1:num_labels
     cursum = cursum + sum(-logical(y==i).*log(a3(:,i)) - (1-logical(y==i)).*log(1-a3(:,i)));
@@ -72,19 +74,35 @@ regular = sum(nn_params.^2) - sum(Theta1(:,1).^2) - sum(Theta2(:,1).^2);
 
 
 J = cursum / m + regular * lambda / 2 / m;
+%Cost function works correctly
 
-
+%Gradient finder code here
+D2 = zeros(size(Theta2));
+D1 = zeros(size(Theta1));
 for ex = 1:size(X,2)
-    delta3 = a3(ex, :);
-    delta3(y(ex)) = delta3(y(ex)) - 1;
-    delta2 = (delta3*Theta2)';
-    delta2 = delta2(2:end);
-    delta2 = delta2.*sigmoidGradient(X(ex,:)*Theta1')';
-    wtf2 = 0;
-    wtf2 = wtf2 + delta3*a2';
+    %Foward Propogation
+    a1 = X(ex,:)';
+    z2 = Theta1 * a1;
+    a2 = sigmoid(z2);
+    a2 = [1;a2];
+    z3 = Theta2 * a2;
+    a3 = sigmoid(z3);
+    
+    answer = zeros(num_labels,1);
+    answer(y(ex)) = 1;
+    delta3 = a3 - answer;
+    
+    delta2 = Theta2' * delta3;
+    delta2 = delta2(2:end); %Remove delta2(0)
+    delta2 = delta2.*sigmoidGradient(z2);
+    %Now delta2 and delta3 should be calculated and ready to go
+    
+    D2 = D2 + delta3 * a2';
+    D1 = D1 + delta2 * a1';
 end
 
-
+Theta1_grad = D1 / m;
+Theta2_grad = D2 / m;
 
 
 
