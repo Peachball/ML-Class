@@ -88,7 +88,7 @@ end
 
 regular1 =  Theta1 * lambda / m;
 regular2 = Theta2 * lambda / m;
-regular1(:, 1) = 0;
+regular1(:, 1) = zeros(size(regular1(:,1)));
 regular2(:, 1) = 0;
 Theta1_grad = D1/m + regular1;
 Theta2_grad = D2/m + regular2;
