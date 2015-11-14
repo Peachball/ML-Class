@@ -72,20 +72,26 @@ regular = sum(nn_params.^2) - sum(Theta1(:,1).^2) - sum(Theta2(:,1).^2);
 
 
 J = cursum / m + regular * lambda / 2 / m;
-
+D1 = zeros(size(Theta1));
+D2 = zeros(size(Theta2));
 
 for ex = 1:size(X,2)
     delta3 = a3(ex, :);
     delta3(y(ex)) = delta3(y(ex)) - 1;
-    delta2 = (delta3*Theta2)';
+    delta2 = delta3*Theta2;
     delta2 = delta2(2:end);
-    delta2 = delta2.*sigmoidGradient(X(ex,:)*Theta1')';
-    wtf2 = 0;
-    wtf2 = wtf2 + delta3*a2';
+    delta2 = delta2.*sigmoidGradient(X(ex,:)*Theta1');
+
+    D2 = D2 + delta3'*a2(ex,:);
+    D1 = D1 + delta2'*X(ex,:);
 end
 
-
-
+regular1 =  Theta1 * lambda / m;
+regular2 = Theta2 * lambda / m;
+regular1(:, 1) = 0;
+regular2(:, 1) = 0;
+Theta1_grad = D1/m + regular1;
+Theta2_grad = D2/m + regular2;
 
 
 
