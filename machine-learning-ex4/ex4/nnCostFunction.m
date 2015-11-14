@@ -75,7 +75,7 @@ J = cursum / m + regular * lambda / 2 / m;
 D1 = zeros(size(Theta1));
 D2 = zeros(size(Theta2));
 
-for ex = 1:size(X,2)
+for ex = 1:size(X,1)
     delta3 = a3(ex, :);
     delta3(y(ex)) = delta3(y(ex)) - 1;
     delta2 = delta3*Theta2;
