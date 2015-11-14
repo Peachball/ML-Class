@@ -79,7 +79,7 @@ J = cursum / m + regular * lambda / 2 / m;
 %Gradient finder code here
 D2 = zeros(size(Theta2));
 D1 = zeros(size(Theta1));
-for ex = 1:size(X,2)
+for ex = 1:size(X,1)
     %Foward Propogation
     a1 = X(ex,:)';
     z2 = Theta1 * a1;
@@ -97,8 +97,8 @@ for ex = 1:size(X,2)
     delta2 = delta2.*sigmoidGradient(z2);
     %Now delta2 and delta3 should be calculated and ready to go
     
-    D2 = D2 + delta3 * a2';
-    D1 = D1 + delta2 * a1';
+    D2 = D2 + (delta3 * a2');
+    D1 = D1 + (delta2 * a1');
 end
 
 Theta1_grad = D1 / m;
