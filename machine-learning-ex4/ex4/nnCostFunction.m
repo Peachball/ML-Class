@@ -74,36 +74,29 @@ regular = sum(nn_params.^2) - sum(Theta1(:,1).^2) - sum(Theta2(:,1).^2);
 
 
 J = cursum / m + regular * lambda / 2 / m;
-%Cost function works correctly
 
-%Gradient finder code here
-D2 = zeros(size(Theta2));
+
 D1 = zeros(size(Theta1));
-for ex = 1:size(X,1)
-    %Foward Propogation
-    a1 = X(ex,:)';
-    z2 = Theta1 * a1;
-    a2 = sigmoid(z2);
-    a2 = [1;a2];
-    z3 = Theta2 * a2;
-    a3 = sigmoid(z3);
-    
-    answer = zeros(num_labels,1);
-    answer(y(ex)) = 1;
-    delta3 = a3 - answer;
-    
-    delta2 = Theta2' * delta3;
-    delta2 = delta2(2:end); %Remove delta2(0)
-    delta2 = delta2.*sigmoidGradient(z2);
-    %Now delta2 and delta3 should be calculated and ready to go
-    
-    D2 = D2 + (delta3 * a2');
-    D1 = D1 + (delta2 * a1');
+D2 = zeros(size(Theta2));
+
+for ex = 1:m
+    delta3 = a3(ex, :);
+    delta3(y(ex)) = delta3(y(ex)) - 1;
+    delta2 = delta3*Theta2;
+    delta2 = delta2(2:end);
+    delta2 = delta2.*sigmoidGradient(X(ex,:)*Theta1');
+
+    D2 = D2 + delta3'*a2(ex,:);
+    D1 = D1 + delta2'*X(ex,:);
 end
 
-Theta1_grad = D1 / m;
-Theta2_grad = D2 / m;
 
+regular1 =  Theta1 * lambda / m;
+regular2 = Theta2 * lambda / m;
+regular1(:, 1) = zeros(size(regular1(:,1)));
+regular2(:, 1) = 0;
+Theta1_grad = D1/m + regular1;
+Theta2_grad = D2/m + regular2;
 
 
 
