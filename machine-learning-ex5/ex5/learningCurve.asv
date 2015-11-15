@@ -54,11 +54,10 @@ error_val   = zeros(m, 1);
 % ---------------------- Sample Solution ----------------------
 
 for i = 1:m
-    theta = trainLinearReg(X(1:i,:),y(1:i),lambda);
-    [e g] = linearRegCostFunction(X(1:i,:),y(1:i), theta, 0);
+    theta = trainLinearReg(X(1:m),y(1:m),lambda);
+    [e g] = linearRegCostFunction(X(1:m,:),y(1:m), theta, 0);
     error_train(i) = e;
-    [e g] = linearRegCostFunction(Xval ,yval ,theta,0);
-    error_val(i) = e;
+    [e g] 
 end
 
 
