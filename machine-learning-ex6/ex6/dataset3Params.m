@@ -27,8 +27,8 @@ possibleC = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 bestC = 0;
 bestSigma = 0;
 error = 0;
-for i = 1:size(possibleC)
-    for j = 1:size(possibleSigma)
+for i = 1:size(possibleC,2)
+    for j = 1:size(possibleSigma,2)
         tempModel = svmTrain(X,y,possibleC(i), @(x1,x2)(gaussianKernel(x1,x2,possibleSigma(j))));
         predictions = svmPredict(tempModel, Xval);
         newerror = mean(double(predictions ~= yval));
@@ -48,9 +48,8 @@ for i = 1:size(possibleC)
 end
 
 
-C = possibleC(bestC)
-sigma = possibleSigma(bestSigma)
-
+C = possibleC(bestC);
+sigma = possibleSigma(bestSigma);
 
 % =========================================================================
 
