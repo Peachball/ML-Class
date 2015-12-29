@@ -61,9 +61,11 @@ X = [ones(size(X,1),1), X];
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-a2 = sigmoid(X*Theta1'); %each row is from a different input set (example)
+z2 = X*Theta1';
+a2 = sigmoid(z2); %each row is from a different input set (example)
 a2 = [ones(size(a2,1),1), a2];
-a3 = sigmoid(a2 * Theta2');
+z3 = z2 * Theta2';
+a3 = sigmoid(z3);
 cursum = 0;
 for i = 1:num_labels
     cursum = cursum + sum(-logical(y==i).*log(a3(:,i)) - (1-logical(y==i)).*log(1-a3(:,i)));
